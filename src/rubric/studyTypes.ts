@@ -24,18 +24,29 @@ const STUDY_TYPE_RULES: StudyTypeRule[] = [
     check: (f) => f.isSystematicReview && !f.isMetaAnalysis,
   },
   // RCT (check for cluster RCT first)
+  // Exclude when explicit quasi-experimental methods are mentioned (IV, RDD, DiD, synthetic control)
   {
     type: 'cluster_rct',
     priority: 90,
     check: (f) =>
       f.hasRandomization &&
       f.hasControlGroup &&
+      !f.hasInstrumentalVariable &&
+      !f.hasRegressionDiscontinuity &&
+      !f.hasDifferenceInDifferences &&
+      !f.hasSyntheticControl &&
       /cluster|school|village|community|site|center|group.?level/i.test(f.matchedKeywords.join(' ')),
   },
   {
     type: 'rct',
     priority: 85,
-    check: (f) => f.hasRandomization && (f.hasControlGroup || f.hasPlacebo),
+    check: (f) =>
+      f.hasRandomization &&
+      (f.hasControlGroup || f.hasPlacebo) &&
+      !f.hasInstrumentalVariable &&
+      !f.hasRegressionDiscontinuity &&
+      !f.hasDifferenceInDifferences &&
+      !f.hasSyntheticControl,
   },
   // Quasi-experimental methods (check specific ones first)
   {
