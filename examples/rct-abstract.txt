@@ -1,0 +1,7 @@
+Background: Micronutrient deficiencies remain prevalent in low-income settings. We conducted a randomized controlled trial to evaluate the impact of a fortified food supplement on child growth outcomes.
+
+Methods: We randomly assigned 1,200 children aged 6-24 months from 40 villages to receive either a fortified supplement (n=600) or placebo (n=600) for 12 months. Randomization was stratified by age and village. The primary outcome was height-for-age z-score (HAZ) at endline. Secondary outcomes included weight-for-age and hemoglobin levels. We conducted intention-to-treat analysis with pre-registered hypotheses. Balance tests confirmed successful randomization across 15 baseline characteristics. Attrition was 8% with no differential dropout between arms.
+
+Results: At 12 months, children in the treatment group showed significantly higher HAZ (+0.23 SD, 95% CI: 0.11-0.35, p<0.001) compared to control. Robustness checks using alternative specifications and Lee bounds for attrition confirmed results.
+
+Conclusions: The fortified supplement significantly improved child growth with high internal validity. Trial registration: ISRCTN12345678.

@@ -1,0 +1,5 @@
+This study evaluates the causal impact of a state-level minimum wage increase on employment using a difference-in-differences design. We exploit the staggered timing of minimum wage changes across U.S. states between 2010 and 2019.
+
+Our identification strategy relies on the parallel trends assumption, which we validate by showing flat pre-trends in an event study framework for 8 quarters before treatment. We use county-level administrative employment data from the Quarterly Census of Employment and Wages (N=850,000 county-quarter observations) with county and quarter fixed effects.
+
+We find a small negative employment effect of -1.2% (SE=0.4%) in the restaurant sector, robust to alternative control groups, bandwidth choices, and the Callaway-Sant'Anna estimator for staggered DiD. Placebo tests using leads show no anticipation effects. Heterogeneity analysis reveals larger effects in counties with lower baseline wages.
