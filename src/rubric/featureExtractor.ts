@@ -10,7 +10,7 @@ const PATTERNS = {
   baseline: /\b(baseline|pre.?treatment|pre.?intervention|before treatment)\b/i,
 
   // Difference-in-differences
-  differenceInDifferences: /\b(difference.?in.?difference|diff.?in.?diff|did\b|dd\s|staggered.?did|staggered.?diff|callaway.?sant.?anna|parallel.?trend|pre.?post.?design|before.?after.?comparison)\b/i,
+  differenceInDifferences: /\b(difference.?in.?differences?|diff.?in.?diff|did\b|dd\s|staggered.?did|staggered.?diff|callaway.?sant.?anna|parallel.?trend|pre.?post.?design|before.?after.?comparison|treated.+cohorts?.+across)\b/i,
   parallelTrends: /\b(parallel.?trend|common.?trend|pre.?trend|flat.?pre|pre.?treatment.?trend|trend.?assumption|placebo.?test|falsification|event.?study.?framework)\b/i,
   fixedEffects: /\b(fixed.?effects?|entity.?fixed|time.?fixed|individual.?fixed|two.?way.?fixed|panel.?data|within.?estimator|county.?fixed|year.?fixed|quarter.?fixed)\b/i,
 
@@ -52,7 +52,7 @@ const PATTERNS = {
 
   // Measurement
   validatedInstruments: /\b(validated.?instrument|validated.?scale|validated.?measure|psychometric|reliability|validity|cronbach|internal.?consistency)\b/i,
-  adminData: /\b(administrative.?data|admin.?data|registr(y|ies)|claims.?data|tax.?records|government.?records|linked.?data|hospital.?records|death.?registr|medical.?records|employment.?data)\b/i,
+  adminData: /\b(administrative.?data|administrative.?records|admin.?data|registr(y|ies)|claims.?data|tax.?records|government.?records|linked.?data|hospital.?records|death.?registr|medical.?records|employment.?data|census|population.?census)\b/i,
   selfReport: /\b(self.?report|survey|questionnaire|interview|focus.?group)\b/i,
   objectiveMeasures: /\b(objective.?measure|biomarker|lab.?test|clinical.?assessment|direct.?observation|administrative.?outcome)\b/i,
 
