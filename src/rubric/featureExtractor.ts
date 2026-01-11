@@ -56,8 +56,8 @@ const PATTERNS = {
   selfReport: /\b(self.?report|survey|questionnaire|interview|focus.?group)\b/i,
   objectiveMeasures: /\b(objective.?measure|biomarker|lab.?test|clinical.?assessment|direct.?observation|administrative.?outcome)\b/i,
 
-  // Sample size extraction
-  sampleSize: /\b(?:n\s*=\s*(\d[\d,]*)|sample(?:\s+size)?(?:\s+of)?\s+(\d[\d,]*)|(\d[\d,]*)\s+(?:participants?|subjects?|patients?|individuals?|observations?|respondents?|households?|firms?|schools?|students?|children|adults))\b/i,
+  // Sample size extraction - supports "N=1000", "1,000 participants", "2.3 million unemployment spells"
+  sampleSize: /\b(?:n\s*=\s*(\d[\d,\.]*)\s*(million|thousand|k|m)?|sample(?:\s+size)?(?:\s+of)?\s+(\d[\d,\.]*)\s*(million|thousand|k|m)?|(\d[\d,\.]*)\s*(million|thousand|k|m)?\s+\w*\s*(?:participants?|subjects?|patients?|individuals?|observations?|respondents?|households?|firms?|schools?|students?|children|adults|spells?|records?|person.?years?))\b/i,
   studyCount: /\b(\d+)\s+(?:studies|trials|articles|papers|publications)\b/i,
 };
 
@@ -82,10 +82,22 @@ export function extractFeatures(text: string): ExtractedFeatures {
   let sampleSizeNumeric: number | null = null;
   const sampleMatch = text.match(PATTERNS.sampleSize);
   if (sampleMatch) {
-    const numStr = sampleMatch[1] || sampleMatch[2] || sampleMatch[3];
+    // Groups: 1=n_value, 2=n_multiplier, 3=sample_value, 4=sample_multiplier, 5=count_value, 6=count_multiplier
+    const numStr = sampleMatch[1] || sampleMatch[3] || sampleMatch[5];
+    const multiplier = sampleMatch[2] || sampleMatch[4] || sampleMatch[6];
     if (numStr) {
       sampleSizeText = sampleMatch[0];
-      sampleSizeNumeric = parseInt(numStr.replace(/,/g, ''), 10);
+      let baseNum = parseFloat(numStr.replace(/,/g, ''));
+      // Apply multiplier
+      if (multiplier) {
+        const mult = multiplier.toLowerCase();
+        if (mult === 'million' || mult === 'm') {
+          baseNum *= 1_000_000;
+        } else if (mult === 'thousand' || mult === 'k') {
+          baseNum *= 1_000;
+        }
+      }
+      sampleSizeNumeric = Math.round(baseNum);
     }
   }
 
