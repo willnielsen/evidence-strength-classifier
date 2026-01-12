@@ -15,7 +15,7 @@ const PATTERNS = {
   fixedEffects: /\b(fixed.?effects?|entity.?fixed|time.?fixed|individual.?fixed|two.?way.?fixed|panel.?data|within.?estimator|county.?fixed|year.?fixed|quarter.?fixed)\b/i,
 
   // Instrumental variables
-  instrumentalVariable: /\b(instrumental.?variable|iv\s|2sls|two.?stage|tsls|instrument(s|ed)?|first.?stage|exclusion.?restriction|exogenous.?variation)\b/i,
+  instrumentalVariable: /\b(instrumental.?variables?|iv\s|2sls|two.?stage|tsls|instrument(s|ed)?|first.?stage|exclusion.?restriction|exogenous.?variation)\b/i,
 
   // Regression discontinuity - more specific patterns to avoid false positives
   regressionDiscontinuity: /\b(regression.?discontinuity|rdd\b|rd\sdesign|discontinuity.?design|running.?variable|sharp.?rd|fuzzy.?rd|mccrary|local.?linear|bandwidth.?sensitivity|calonico|cattaneo|discontinuity.?at)\b/i,
