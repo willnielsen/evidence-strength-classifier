@@ -21,8 +21,8 @@ const PATTERNS = {
   // Regression discontinuity - more specific patterns to avoid false positives
   regressionDiscontinuity: /\b(regression.?discontinuity|rdd\b|rd\sdesign|discontinuity.?design|running.?variable|sharp.?rd|fuzzy.?rd|mccrary|local.?linear|bandwidth.?sensitivity|calonico|cattaneo|discontinuity.?at)\b/i,
 
-  // Matching
-  matchingPSM: /\b(propensity.?score|psm|matching|matched.?sample|nearest.?neighbor|kernel.?matching|coarsened.?exact|cem|mahalanobis|caliper|overlap|common.?support)\b/i,
+  // Matching and weighting methods
+  matchingPSM: /\b(propensity.?score|psm|matching|matched.?sample|nearest.?neighbor|kernel.?matching|coarsened.?exact|cem|mahalanobis|caliper|overlap|common.?support|inverse.?probability|ipw|iptw|reweighting|target.?trial|trial.?emulation)\b/i,
 
   // Synthetic control
   syntheticControl: /\b(synthetic.?control|scm|donor.?pool|counterfactual.?unit|pre.?treatment.?fit|abadie)\b/i,
@@ -33,9 +33,9 @@ const PATTERNS = {
   // Quality indicators
   powerCalculation: /\b(power.?calculation|power.?analysis|sample.?size.?calculation|minimum.?detectable.?effect|mde|statistical.?power)\b/i,
   preRegistration: /\b(pre.?register|preregister|registered.?report|prospective.?registration|trial.?registration|clinicaltrials\.gov|osf|aspredicted|isrctn|aegis)\b/i,
-  robustnessChecks: /\b(robust(ness)?|sensitivity.?analysis|specification.?test|alternative.?specification|heterogeneity.?analysis|subgroup.?analysis|placebo.?regression|falsification)\b/i,
+  robustnessChecks: /\b(robust(ness)?|specification.?test|alternative.?specification|alternative.?grace|heterogeneity.?analysis|subgroup.?analy|placebo.?regression|falsification|consistent.?across)\b/i,
   balanceTests: /\b(balance.?tests?|balance.?table|covariate.?balance|baseline.?balance|t.?test|chi.?square.?test|standardized.?difference)\b/i,
-  sensitivityAnalysis: /\b(sensitivity.?analysis|bounds.?analysis|lee.?bounds|manski.?bounds|rosenbaum.?bounds|oster|altonji|selection.?on.?unobservables)\b/i,
+  sensitivityAnalysis: /\b(sensitivity.?analy|bounds.?analysis|lee.?bounds|manski.?bounds|rosenbaum.?bounds|oster|altonji|selection.?on.?unobservables|e.?value|unmeasured.?confound|per.?protocol)\b/i,
   CONSORT: /\b(consort|consolidated.?standards)\b/i,
   PRISMA: /\b(prisma|preferred.?reporting.?items)\b/i,
   dataAvailability: /\b(data.?available|data.?availability|replication.?data|open.?data|data.?repository|data.?access)\b/i,
