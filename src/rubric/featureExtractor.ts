@@ -58,7 +58,8 @@ const PATTERNS = {
   objectiveMeasures: /\b(objective.?measure|biomarker|lab.?test|clinical.?assessment|direct.?observation|administrative.?outcome)\b/i,
 
   // Sample size extraction - supports "N=1000", "1,000 participants", "2.3 million unemployment spells"
-  sampleSize: /\b(?:n\s*=\s*(\d[\d,\.]*)\s*(million|thousand|k|m)?|sample(?:\s+size)?(?:\s+of)?\s+(\d[\d,\.]*)\s*(million|thousand|k|m)?|(\d[\d,\.]*)\s*(million|thousand|k|m)?\s+\w*\s*(?:participants?|subjects?|patients?|individuals?|observations?|respondents?|households?|firms?|schools?|students?|children|adults|spells?|records?|person.?years?))\b/i,
+  // Note: Decimals only allowed when followed by million/thousand to avoid matching years like "2022."
+  sampleSize: /\b(?:n\s*=\s*(\d[\d,]*)\s*(million|thousand|k|m)?|sample(?:\s+size)?(?:\s+of)?\s+(\d[\d,]*)\s*(million|thousand|k|m)?|(\d[\d,\.]*)\s*(million|thousand)\s+\w*\s*(?:participants?|subjects?|patients?|individuals?|observations?|respondents?|households?|firms?|schools?|students?|children|adults|adolescents?|spells?|records?|person.?years?)|(\d[\d,]*)\s+(?:participants?|subjects?|patients?|individuals?|observations?|respondents?|households?|firms?|schools?|students?|children|adults|adolescents?|spells?|records?|person.?years?))\b/i,
   studyCount: /\b(\d+)\s+(?:studies|trials|articles|papers|publications)\b/i,
 };
 
@@ -83,8 +84,8 @@ export function extractFeatures(text: string): ExtractedFeatures {
   let sampleSizeNumeric: number | null = null;
   const sampleMatch = text.match(PATTERNS.sampleSize);
   if (sampleMatch) {
-    // Groups: 1=n_value, 2=n_multiplier, 3=sample_value, 4=sample_multiplier, 5=count_value, 6=count_multiplier
-    const numStr = sampleMatch[1] || sampleMatch[3] || sampleMatch[5];
+    // Groups: 1=n_value, 2=n_multiplier, 3=sample_value, 4=sample_multiplier, 5=count_with_mult, 6=multiplier, 7=count_direct
+    const numStr = sampleMatch[1] || sampleMatch[3] || sampleMatch[5] || sampleMatch[7];
     const multiplier = sampleMatch[2] || sampleMatch[4] || sampleMatch[6];
     if (numStr) {
       sampleSizeText = sampleMatch[0];
