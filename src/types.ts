@@ -47,6 +47,7 @@ export interface ExtractedFeatures {
   hasControlGroup: boolean;
   hasBlinding: boolean;
   hasBaseline: boolean;
+  hasClusterDesign: boolean;
 
   // Quasi-experimental indicators
   hasDifferenceInDifferences: boolean;

@@ -31,11 +31,11 @@ const STUDY_TYPE_RULES: StudyTypeRule[] = [
     check: (f) =>
       f.hasRandomization &&
       f.hasControlGroup &&
+      f.hasClusterDesign &&
       !f.hasInstrumentalVariable &&
       !f.hasRegressionDiscontinuity &&
       !f.hasDifferenceInDifferences &&
-      !f.hasSyntheticControl &&
-      /cluster|school|village|community|site|center|group.?level/i.test(f.matchedKeywords.join(' ')),
+      !f.hasSyntheticControl,
   },
   {
     type: 'rct',

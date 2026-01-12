@@ -3,11 +3,12 @@ import { ExtractedFeatures } from '../types.js';
 // Keyword patterns for feature extraction
 const PATTERNS = {
   // Randomization and RCT indicators
-  randomization: /\b(random(ly|ized|isation|ization)?|rct|randomized controlled trial|randomised controlled trial|random assignment|random allocation)\b/i,
+  randomization: /\b(random(ly|ized|isation|ization)?|rct|randomized controlled trial|randomised controlled trial|random assignment|random allocation|cluster.?random)/i,
   placebo: /\b(placebo|sham|dummy treatment)\b/i,
-  controlGroup: /\b(control group|control arm|comparison group|waitlist control|treatment as usual|usual care|no.?treatment|compared to control|control\))\b/i,
+  controlGroup: /\b(control group|control arm|control condition|comparison group|waitlist control|treatment as usual|usual care|no.?treatment|compared to control|control\)|assigned to control|to control\b|(\d+)\s+to\s+control)\b/i,
   blinding: /\b(blind(ed|ing)?|double.?blind|single.?blind|triple.?blind|mask(ed|ing)?|concealed allocation)\b/i,
   baseline: /\b(baseline|pre.?treatment|pre.?intervention|before treatment)\b/i,
+  clusterDesign: /\b(cluster.?random|cluster.?rct|cluster.?trial|group.?random|school.?random|village.?random|site.?random|community.?random|randomized.+(?:schools?|villages?|clusters?|communities|sites|clinics|hospitals))/i,
 
   // Difference-in-differences
   differenceInDifferences: /\b(difference.?in.?differences?|diff.?in.?diff|did\b|dd\s|staggered.?did|staggered.?diff|callaway.?sant.?anna|parallel.?trend|pre.?post.?design|before.?after.?comparison|treated.+cohorts?.+across)\b/i,
@@ -115,6 +116,7 @@ export function extractFeatures(text: string): ExtractedFeatures {
     hasControlGroup: checkPattern(PATTERNS.controlGroup, 'control_group'),
     hasBlinding: checkPattern(PATTERNS.blinding, 'blinding'),
     hasBaseline: checkPattern(PATTERNS.baseline, 'baseline'),
+    hasClusterDesign: checkPattern(PATTERNS.clusterDesign, 'cluster_design'),
 
     // Quasi-experimental indicators
     hasDifferenceInDifferences: checkPattern(PATTERNS.differenceInDifferences, 'difference_in_differences'),
