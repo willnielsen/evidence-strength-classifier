@@ -28,12 +28,12 @@ const PATTERNS = {
   syntheticControl: /\b(synthetic.?control|scm|donor.?pool|counterfactual.?unit|pre.?treatment.?fit|abadie)\b/i,
 
   // Event study
-  eventStudy: /\b(event.?study|event.?time|relative.?time|leads?.?and.?lags?|dynamic.?effects?|pre.?period|post.?period|staggered)\b/i,
+  eventStudy: /\b(event.?study|event.?time|event.?window|relative.?time|leads?.?and.?lags?|dynamic.?effects?|pre.?period|post.?period|staggered|announcement.?day|announcement.?effect|high.?frequency.?(?:data|identification)|around.+announcements?)\b/i,
 
   // Quality indicators
   powerCalculation: /\b(power.?calculation|power.?analysis|sample.?size.?calculation|minimum.?detectable.?effect|mde|statistical.?power)\b/i,
   preRegistration: /\b(pre.?register|preregister|registered.?report|prospective.?registration|trial.?registration|clinicaltrials\.gov|osf|aspredicted|isrctn|aegis)\b/i,
-  robustnessChecks: /\b(robust(ness)?|specification.?test|alternative.?specification|alternative.?grace|heterogeneity.?analysis|subgroup.?analy|placebo.?regression|falsification|consistent.?across)\b/i,
+  robustnessChecks: /\b(robust(ness)?|robust to|specification.?test|alternative.?specification|alternative.?grace|alternative.?event|alternative.?window|heterogeneity.?analysis|subgroup.?analy|placebo.?regression|placebo.?tests?|falsification|consistent.?across)\b/i,
   balanceTests: /\b(balance.?tests?|balance.?table|covariate.?balance|baseline.?balance|t.?test|chi.?square.?test|standardized.?difference)\b/i,
   sensitivityAnalysis: /\b(sensitivity.?analy|bounds.?analysis|lee.?bounds|manski.?bounds|rosenbaum.?bounds|oster|altonji|selection.?on.?unobservables|e.?value|unmeasured.?confound|per.?protocol)\b/i,
   CONSORT: /\b(consort|consolidated.?standards)\b/i,
@@ -84,22 +84,29 @@ export function extractFeatures(text: string): ExtractedFeatures {
   let sampleSizeNumeric: number | null = null;
   const sampleMatch = text.match(PATTERNS.sampleSize);
   if (sampleMatch) {
-    // Groups: 1=n_value, 2=n_multiplier, 3=sample_value, 4=sample_multiplier, 5=count_with_mult, 6=multiplier, 7=count_direct
-    const numStr = sampleMatch[1] || sampleMatch[3] || sampleMatch[5] || sampleMatch[7];
-    const multiplier = sampleMatch[2] || sampleMatch[4] || sampleMatch[6];
-    if (numStr) {
-      sampleSizeText = sampleMatch[0];
-      let baseNum = parseFloat(numStr.replace(/,/g, ''));
-      // Apply multiplier
-      if (multiplier) {
-        const mult = multiplier.toLowerCase();
-        if (mult === 'million' || mult === 'm') {
-          baseNum *= 1_000_000;
-        } else if (mult === 'thousand' || mult === 'k') {
-          baseNum *= 1_000;
+    // Skip if preceded by index names like "S&P" (e.g., "S&P 500 firms")
+    const matchIndex = sampleMatch.index || 0;
+    const precedingText = text.slice(Math.max(0, matchIndex - 5), matchIndex);
+    const isIndexName = /S&P\s*$/i.test(precedingText);
+
+    if (!isIndexName) {
+      // Groups: 1=n_value, 2=n_multiplier, 3=sample_value, 4=sample_multiplier, 5=count_with_mult, 6=multiplier, 7=count_direct
+      const numStr = sampleMatch[1] || sampleMatch[3] || sampleMatch[5] || sampleMatch[7];
+      const multiplier = sampleMatch[2] || sampleMatch[4] || sampleMatch[6];
+      if (numStr) {
+        sampleSizeText = sampleMatch[0];
+        let baseNum = parseFloat(numStr.replace(/,/g, ''));
+        // Apply multiplier
+        if (multiplier) {
+          const mult = multiplier.toLowerCase();
+          if (mult === 'million' || mult === 'm') {
+            baseNum *= 1_000_000;
+          } else if (mult === 'thousand' || mult === 'k') {
+            baseNum *= 1_000;
+          }
         }
+        sampleSizeNumeric = Math.round(baseNum);
       }
-      sampleSizeNumeric = Math.round(baseNum);
     }
   }
 
