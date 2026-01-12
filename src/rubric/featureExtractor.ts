@@ -4,6 +4,8 @@ import { ExtractedFeatures } from '../types.js';
 const PATTERNS = {
   // Randomization and RCT indicators
   randomization: /\b(random(ly|ized|isation|ization)?|rct|randomized controlled trial|randomised controlled trial|random assignment|random allocation|cluster.?random)/i,
+  // Patterns indicating the study is explicitly NOT randomized (negates randomization detection)
+  explicitlyObservational: /\b(observational data|observational study|non.?randomized|non.?randomised|target trial emulation|emulated? a target trial|randomized trials?.{0,30}(are |were )?(lacking|unavailable|not available|absent)|in the absence of.{0,20}randomiz|using observational|observational cohort)\b/i,
   placebo: /\b(placebo|sham|dummy treatment)\b/i,
   controlGroup: /\b(control group|control arm|control condition|comparison group|waitlist control|treatment as usual|usual care|no.?treatment|compared to control|control\)|assigned to control|to control\b|(\d+)\s+to\s+control)\b/i,
   blinding: /\b(blind(ed|ing)?|double.?blind|single.?blind|triple.?blind|mask(ed|ing)?|concealed allocation)\b/i,
@@ -117,9 +119,17 @@ export function extractFeatures(text: string): ExtractedFeatures {
     studyCountText = studyCountMatch[0];
   }
 
+  // Check for randomization but negate if explicitly observational
+  const rawRandomization = PATTERNS.randomization.test(text);
+  const isExplicitlyObservational = PATTERNS.explicitlyObservational.test(text);
+  const hasRandomization = rawRandomization && !isExplicitlyObservational;
+  if (hasRandomization) {
+    matchedKeywords.push('randomization');
+  }
+
   return {
     // Study design indicators
-    hasRandomization: checkPattern(PATTERNS.randomization, 'randomization'),
+    hasRandomization,
     hasPlacebo: checkPattern(PATTERNS.placebo, 'placebo'),
     hasControlGroup: checkPattern(PATTERNS.controlGroup, 'control_group'),
     hasBlinding: checkPattern(PATTERNS.blinding, 'blinding'),
